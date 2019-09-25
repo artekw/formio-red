@@ -13,7 +13,7 @@ module.exports = function (RED) {
       var formio = require('formio-service')({
         formio: config.project,
         login: config.login,
-        pass: config.password
+        password: config.password
       });
 
       var query = msg.query || {};
