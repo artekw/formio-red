@@ -1,9 +1,11 @@
-module.exports = function(RED) {
+module.exports = function (RED) {
   "use strict";
   var bodyParser = require("body-parser");
   var basicAuth = require('basic-auth-connect');
   var jsonParser = bodyParser.json();
-  var urlencParser = bodyParser.urlencoded({extended:true});
+  var urlencParser = bodyParser.urlencoded({
+    extended: true
+  });
 
   /**
    * Handles all Form.io Webhook inputs.
@@ -20,7 +22,7 @@ module.exports = function(RED) {
      * @param req
      * @param res
      */
-    this.errorHandler = function(err, req, res) {
+    this.errorHandler = function (err, req, res) {
       this.warn(err);
       res.sendStatus(500);
     };
@@ -29,11 +31,13 @@ module.exports = function(RED) {
      * Called for all http callbacks.
      * @param req
      */
-    this.callback = function(req, res) {
+    this.callback = function (req, res) {
       var msg = {
         _msgid: RED.util.generateId(),
         req: req,
-        res: {_res: res}
+        res: {
+          _res: res
+        }
       };
 
       if (node.method === 'post' || node.method === 'put') {
@@ -56,7 +60,7 @@ module.exports = function(RED) {
      */
     RED.httpNode[node.method](
       '/' + path,
-      basicAuth('admin', config.apikey),
+      basicAuth(config.login, config.password),
       jsonParser,
       urlencParser,
       this.callback.bind(this),

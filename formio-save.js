@@ -1,4 +1,4 @@
-module.exports = function(RED) {
+module.exports = function (RED) {
   "use strict";
   /**
    * Save a form.
@@ -8,14 +8,15 @@ module.exports = function(RED) {
   function FormioSave(node) {
     RED.nodes.createNode(this, node);
     var config = RED.nodes.getNode(node.formio);
-    this.on("input", function(msg) {
+    this.on("input", function (msg) {
       var src = config.project + '/' + node.form;
       var formio = require('formio-service')({
         formio: config.project,
-        key: config.apikey
+        login: config.login,
+        pass: config.password
       });
 
-      (new formio.Form(src)).submit(msg.payload).then(function(res) {
+      (new formio.Form(src)).submit(msg.payload).then(function (res) {
         msg.submission = res.body;
         this.send(msg);
       }.bind(this)).catch(this.error.bind(this));
